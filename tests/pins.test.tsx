@@ -18,13 +18,13 @@ const bandBeneath = (on: On, text?: string) =>
     return text ? <Text key="other">{text}</Text> : <Box />
   })
 
-const SLACK = 'https://upwind.slack.com/archives/C123/p1700000000000100'
+const SLACK = 'https://acme.slack.com/archives/C0000000000/p1700000000000100'
 
 describe('pins', () => {
   test('the model pins a link and the band shows it', async ($, on: On) => {
     bandBeneath(on)
-    const { result } = await $.tool.call({ tool: 'mcp__pins__pin', url: SLACK, label: 'UP-8519 thread' } as never)
-    expect(String(result)).toContain('UP-8519 thread')
+    const { result } = await $.tool.call({ tool: 'mcp__pins__pin', url: SLACK, label: 'PROJ-123 thread' } as never)
+    expect(String(result)).toContain('PROJ-123 thread')
 
     for (const surface of ['terminal', 'desktop'] as const) {
       const ui = await $.ui.mount({ ...BAND, surface } as never)
@@ -57,8 +57,8 @@ describe('pins', () => {
   test('each pin shows its host icon', async ($, on: On) => {
     bandBeneath(on)
     await $.command.run(run('pin', SLACK))
-    await $.command.run(run('pin', 'https://github.com/upwindsecurity/app/pull/3443'))
-    await $.command.run(run('pin', 'https://upwind.atlassian.net/browse/UP-8519'))
+    await $.command.run(run('pin', 'https://github.com/acme/web/pull/42'))
+    await $.command.run(run('pin', 'https://acme.atlassian.net/browse/PROJ-123'))
     await $.command.run(run('pin', 'https://example.com/doc'))
     const ui = await $.ui.mount({ ...BAND, surface: 'terminal' } as never)
     for (const icon of ['💬', '🐙', '🎫', '📌']) {

@@ -80,7 +80,7 @@ export const register: Register = on => {
         'Pin a link in a band above the user\'s prompt for the rest of this session. ' +
         'Use when the user asks to pin something ("pin the slack thread", "pin that PR"): ' +
         'find the URL they mean earlier in the conversation and pass it with a short label ' +
-        '(e.g. "UP-8519 Slack thread", "PR #3443"). Pinning the same URL again updates its label.',
+        '(e.g. "PROJ-123 Slack thread", "PR #42"). Pinning the same URL again updates its label.',
       inputSchema: {
         type: 'object',
         properties: {

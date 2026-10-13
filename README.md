@@ -3,7 +3,7 @@
 A Claude Code mod that pins links (Slack threads, PRs, Jira tickets) in a band above the prompt for the rest of the session.
 
 ```
-💬 UP-8519 thread ×   🐙 app#3443 ×   🎫 UP-8519 ×
+💬 PROJ-123 thread ×   🐙 web#42 ×   🎫 PROJ-123 ×
 ```
 
 ## Install
