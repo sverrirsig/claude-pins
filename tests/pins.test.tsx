@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'claude-code/testing'
+import type { Register } from 'claude-code'
 
 const BAND = {
   plugin: 'pins',
@@ -9,10 +10,19 @@ const BAND = {
 const run = (command: string, args = '') =>
   ({ command, args, origin: { kind: 'composer' }, presentation: { isFullscreen: false, columns: 120 } }) as const
 
+type On = Parameters<Register>[0]
+
+const bandBeneath = (on: On, text?: string) =>
+  on('ui.render', { component: 'AbovePrompt' }, async ($, e) => {
+    const { Box, Text } = $.ui.resolve(e)
+    return text ? <Text key="other">{text}</Text> : <Box />
+  })
+
 const SLACK = 'https://upwind.slack.com/archives/C123/p1700000000000100'
 
 describe('pins', () => {
-  test('the model pins a link and the band shows it', async $ => {
+  test('the model pins a link and the band shows it', async ($, on: On) => {
+    bandBeneath(on)
     const { result } = await $.tool.call({ tool: 'mcp__pins__pin', url: SLACK, label: 'UP-8519 thread' } as never)
     expect(String(result)).toContain('UP-8519 thread')
 
@@ -35,7 +45,8 @@ describe('pins', () => {
     expect((await $.command.run(run('pin'))).text).toBe('No pins.')
   })
 
-  test('the × button unpins', async $ => {
+  test('the × button unpins', async ($, on: On) => {
+    bandBeneath(on)
     await $.command.run(run('pin', `${SLACK} thread`))
     const ui = await $.ui.mount({ ...BAND, surface: 'terminal' } as never)
     await ui.press({ key: `unpin-${SLACK}` } as never)
@@ -43,7 +54,8 @@ describe('pins', () => {
     await ui.unmount()
   })
 
-  test('each pin shows its host icon', async $ => {
+  test('each pin shows its host icon', async ($, on: On) => {
+    bandBeneath(on)
     await $.command.run(run('pin', SLACK))
     await $.command.run(run('pin', 'https://github.com/upwindsecurity/app/pull/3443'))
     await $.command.run(run('pin', 'https://upwind.atlassian.net/browse/UP-8519'))
@@ -52,6 +64,15 @@ describe('pins', () => {
     for (const icon of ['💬', '🐙', '🎫', '📌']) {
       expect(await ui.find({ type: 'Text', text: new RegExp(icon) } as never)).toBeDefined()
     }
+    await ui.unmount()
+  })
+
+  test('pins sit above what other plugins draw in the band', async ($, on: On) => {
+    bandBeneath(on, 'another plugin')
+    await $.command.run(run('pin', SLACK))
+    const ui = await $.ui.mount({ ...BAND, surface: 'terminal' } as never)
+    expect(await ui.find({ type: 'Link' } as never)).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /another plugin/ } as never)).toBeDefined()
     await ui.unmount()
   })
 

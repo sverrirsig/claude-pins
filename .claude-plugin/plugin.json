@@ -1,6 +1,6 @@
 {
   "name": "pins",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Pin links (Slack threads, PRs, tickets) above the prompt for the current session",
   "author": { "name": "Sverrir Sigurdsson" },
   "repository": "https://github.com/sverrirsig/claude-pins",

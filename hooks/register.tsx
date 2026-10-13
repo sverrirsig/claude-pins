@@ -149,8 +149,9 @@ export const register: Register = on => {
     if (e.props.hasSurvey || list.length === 0) return next(e)
 
     const { Box, Button, Link, Text } = $.ui.resolve(e)
+    const beneath = await next(e)
 
-    return (
+    const row = (
       <Box flexDirection="row" flexWrap="wrap" columnGap={2}>
         {list.map(pin => (
           <Box key={`pin-${pin.url}`} flexDirection="row">
@@ -164,6 +165,13 @@ export const register: Register = on => {
             />
           </Box>
         ))}
+      </Box>
+    )
+
+    return (
+      <Box flexDirection="column">
+        {row}
+        {beneath}
       </Box>
     )
   })
