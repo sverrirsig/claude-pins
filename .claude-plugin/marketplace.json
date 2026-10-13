@@ -1,0 +1,13 @@
+{
+  "name": "claude-pins",
+  "description": "Pin links above the Claude Code prompt",
+  "owner": {
+    "name": "Sverrir Sigurdsson"
+  },
+  "plugins": [
+    {
+      "name": "pins",
+      "source": "./"
+    }
+  ]
+}
